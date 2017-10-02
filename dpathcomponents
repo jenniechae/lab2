@@ -95,18 +95,7 @@ module lab2_proc_AluVRTL
   // Add more alu function
   //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-module lab1_imul_IntMulAltVRTL
-(
-  .clk(),
-  .reset(),
-  .req_val(),
-  .req_rdy(),
-  .req_msg(),
 
-  .resp_val(),
-  .resp_rdy(),
-  .resp_msg()
-);
 
 
 endmodule
