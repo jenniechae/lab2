@@ -70,10 +70,10 @@ module lab2_proc_ProcBaseCtrlVRTL
   output logic        commit_inst,
 
   // multiplier signals (mul->ctrl)
-  output  logic req_val,
-  input   logic req_rdy,
-  input   logic resp_val,
-  output  logic resp_rdy
+  output  logic imulreq_val,
+  input   logic imulreq_rdy,
+  input   logic imulresp_val,
+  output  logic imulresp_rdy
 );
 
   //----------------------------------------------------------------------
@@ -442,7 +442,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // Final ostall signal
 
-  assign ostall_D = val_D && ( ostall_mngr2proc_D || ostall_hazard_D );
+  assign ostall_D = val_D && ( ostall_mngr2proc_D || ostall_hazard_D || !imulreq_rdy);
 
   // osquash due to jump instruction in D stage (not implemented yet)
 
@@ -457,6 +457,11 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   logic  next_val_D;
   assign next_val_D = val_D && !stall_D && !squash_D;
+  
+  // multiplier
+  assign imulreq_val = stall_D;
+
+
 
   //----------------------------------------------------------------------
   // X stage
@@ -508,7 +513,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // ostall due to dmemreq not ready.
 
-  assign ostall_X = val_X && ( dmemreq_type_X != nr ) && !dmemreq_rdy;
+  assign ostall_X = (val_X && ( dmemreq_type_X != nr ) && !dmemreq_rdy) ||  (val_X && (alu_fn_x==4'd10) && !imulres_val);
 
   // osquash due to taken branch, notice we can't osquash if current
   // stage stalls, otherwise we will send osquash twice.
@@ -528,6 +533,10 @@ module lab2_proc_ProcBaseCtrlVRTL
   logic  next_val_X;
   assign next_val_X = val_X && !stall_X;
 
+  // multiplier signal
+  
+  assign imulresp_rdy = stall_X;
+  
   //----------------------------------------------------------------------
   // M stage
   //----------------------------------------------------------------------
