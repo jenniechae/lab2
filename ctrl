@@ -67,8 +67,13 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   output logic        stats_en_wen_W,
 
-  output logic        commit_inst
+  output logic        commit_inst,
 
+  // multiplier signals (mul->ctrl)
+  output  logic req_val,
+  input   logic req_rdy,
+  input   logic resp_val,
+  output  logic resp_rdy
 );
 
   //----------------------------------------------------------------------
