@@ -13,7 +13,6 @@
 `include "lab2_proc/ProcBaseCtrlVRTL.v"
 `include "lab2_proc/ProcBaseDpathVRTL.v"
 `include "lab2_proc/DropUnitVRTL.v"
-`include "lab1_imul/IntMulAltVRTL.v"
 
 module lab2_proc_ProcBaseVRTL
 #(
@@ -137,18 +136,6 @@ module lab2_proc_ProcBaseVRTL
   logic [31:0] inst_D;
   logic        br_cond_eq_X;
 
-  // multiplier signal (mul->dptah/ctrl)
-  
-   logic        req_val;
-   logic        req_rdy;
-   logic [63:0] req_msg;
-   logic        resp_val;
-   logic        resp_rdy;
-   logic [31:0] resp_msg;
-
-  
-  
-
   //----------------------------------------------------------------------
   // Pack Memory Request Messages
   //----------------------------------------------------------------------
@@ -247,14 +234,8 @@ module lab2_proc_ProcBaseVRTL
     .inst_D                 (inst_D),
     .br_cond_eq_X           (br_cond_eq_X),
 
-    .commit_inst            (commit_inst),
- 
-    // multiplier signals (multiplier->ctrl)
-    .mulreqval              (req_val),
-    .mulreq_rdy             (req_rdy),
-    .mulrespval            (resp_val),
-    .mulresprdy             (resp_rdy)
- );
+    .commit_inst            (commit_inst)
+  );
 
   //----------------------------------------------------------------------
   // Bypass Queue
@@ -360,7 +341,6 @@ module lab2_proc_ProcBaseVRTL
     .rf_waddr_W              (rf_waddr_W),
     .rf_wen_W                (rf_wen_W),
     .stats_en_wen_W          (stats_en_wen_W),
-    
 
     // status signals (dpath->ctrl)
 
@@ -369,29 +349,8 @@ module lab2_proc_ProcBaseVRTL
 
     // stats_en
 
-    .stats_en                (stats_en),
-    
-    // multiplier input output
-    .mul_in                   (req_msg),
-    .mul_out                  (resp_msg)
+    .stats_en                (stats_en)
   );
- 
-  //Multiplier processor
-
-module lab1_imul_IntMulAltVRTL
-(
-  .clk(clk),
-  .reset(reset),
-  .req_val(req_val),
-  .req_rdy(req_rdy),
-  .req_msg(req_msg),
-
-  .resp_val(resp_val),
-  .resp_rdy(resp_rdy),
-  .resp_msg(resp_msg)
-);
-
-  
 
   //----------------------------------------------------------------------
   // Line tracing
